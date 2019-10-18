@@ -1,20 +1,21 @@
+# Reference: https://github.com/MrKhan0747/Blood-Cell-Subtypes-Classification
+
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import time
-
 import matplotlib.pyplot as plt
+import tensorflow.keras.backend as K
 
 from data import create_data, separate_features_and_label
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D
 from tensorflow.keras.utils import to_categorical
+from tensorflow.keras import optimizers
 
-from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.metrics import accuracy_score
 
 
 TRAIN_DATA_DIR = "/home/bloo/Documents/deep-learning/datasets/blood-cells/dataset2-master/images/TRAIN"
 TEST_DATA_DIR = "/home/bloo/Documents/deep-learning/datasets/blood-cells/dataset2-master/images/TEST"
-START_TIME = time.time()
 
 
 train_data = create_data(TRAIN_DATA_DIR)
@@ -50,7 +51,8 @@ model.add(Dense(4, activation="softmax"))
 
 model.summary()
 
-model.compile(optimizer="adam", loss="sparse_categorical_crossentropy", metrics=["accuracy"])
+adam = optimizers.Adam(lr=0.002)
+model.compile(optimizer=adam, loss="sparse_categorical_crossentropy", metrics=["accuracy"])
 
 hist = model.fit(train_X, train_y, epochs=50, batch_size=128, validation_split=0.2)
 
@@ -76,12 +78,14 @@ plt.show()
 
 # model prediction
 
-# y_pred = model.predict_classes(test_X)
-# print(y_pred)
-#
+y_pred = model.predict_classes(test_X)
+print(y_pred)
+
 # for i in range(10):
 #     print("Actual=%s, Predicted=%s" % (test_y[i], y_pred[i]))
 
 # accuracy_score
-# accuracy_score(test_y, y_pred)
-print("Elapsed Time: ", time.time() - START_TIME)
+accuracy_score(test_y, y_pred)
+
+# learning rate
+print("Learning Rate: " + str(K.eval(model.optimizer.lr)))

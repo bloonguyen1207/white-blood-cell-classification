@@ -10,6 +10,6 @@ So I just enter the first year of my master program in Applied Computer Science,
 
 As my teacher guided me, and gave me a topic to work on, I found the dataset, then tried to run [an existing source code on github by MrKhan0747](https://github.com/MrKhan0747/Blood-Cell-Subtypes-Classification/).
 
-Now my goal for this project is to improve the result of his work.
+Now my goal for this project is to improve the result of his work, by either changing the CNN's params, or applying other methods.
 
 ## What I changed

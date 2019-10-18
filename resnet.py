@@ -1,91 +1,73 @@
-# from __future__ import absolute_import, division, print_function, unicode_literals
-#
-# import time
-#
-# import numpy as np
-# import matplotlib.pyplot as plt
-# import os
-# import cv2
-# import random
-#
-# from data import create_data, separate_features_and_label
-#
-# from tensorflow.keras.models import Sequential
-# from tensorflow.keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D
-# from tensorflow.keras.utils import to_categorical
-#
-# from sklearn.metrics import accuracy_score, confusion_matrix
-#
-#
-# TRAIN_DATA_DIR = "/home/bloo/Documents/deep-learning/datasets/blood-cells/dataset2-master/images/TRAIN"
-# TEST_DATA_DIR = "/home/bloo/Documents/deep-learning/datasets/blood-cells/dataset2-master/images/TEST"
-#
-#
-# train_data = create_data(TRAIN_DATA_DIR)
-# test_data = create_data(TEST_DATA_DIR)
-#
-# train_X, train_y = separate_features_and_label(train_data)
-# test_X, test_y = separate_features_and_label(test_data)
-#
-# categorical_train_y = to_categorical(train_y)
-# categorical_test_y = to_categorical(test_y)
-#
-# # model = Sequential()
-# #
-# # model.add(Conv2D(32, (3, 3), input_shape=(train_X.shape[1:]), activation="relu"))
-# # model.add(MaxPooling2D(pool_size=(2, 2)))
-# # model.add(Dropout(0.20))
-# #
-# # model.add(Conv2D(64, (3, 3), activation="relu"))
-# # model.add(MaxPooling2D(pool_size=(2, 2)))
-# # model.add(Dropout(0.20))
-# #
-# # model.add(Conv2D(64, (3, 3), activation="relu"))
-# # model.add(MaxPooling2D(pool_size=(2, 2)))
-# # model.add(Dropout(0.40))
-# #
-# # model.add(Flatten())
-# #
-# # model.add(Dense(64, activation="relu"))
-# # model.add(Dense(128, activation="sigmoid"))
-# # model.add(Dense(64, activation="relu"))
-# #
-# # model.add(Dense(4, activation="softmax"))
-# #
-# # model.summary()
-# #
-# # model.compile(optimizer="adam", loss="sparse_categorical_crossentropy", metrics=["accuracy"])
-#
-# # hist = model.fit(train_X, train_y, epochs=50, batch_size=128, validation_split=0.2)
-#
-# # test_loss, test_acc = model.evaluate(test_X, test_y)
-#
-# # train and validation loss
-# plt.plot(hist.history['loss'])
-# plt.plot(hist.history['val_loss'])
-# plt.title('Model Loss')
-# plt.ylabel('Loss')
-# plt.xlabel('Epoch')
-# plt.legend(['train', 'Validation'], loc='upper left')
-# plt.show()
-#
-# # train and validation accuracy
-# plt.plot(hist.history['acc'])
-# plt.plot(hist.history['val_acc'])
-# plt.title('Model Accuracy')
-# plt.ylabel('Accuracy')
-# plt.xlabel('Epoch')
-# plt.legend(['train', 'Validation'], loc='upper left')
-# plt.show()
-#
-# # model prediction
-#
-# y_pred = model.predict_classes(test_X)
-# print(y_pred)
-#
-# for i in range(10):
-#     print("Actual=%s, Predicted=%s" % (test_y[i], y_pred[i]))
-#
-# # accuracy_score
-# accuracy_score(test_y, y_pred)
-# print("Elapsed Time: ", time.time() - START_TIME)
+# Reference: https://github.com/priya-dwivedi/Deep-Learning/blob/master/resnet_keras/Residual_Networks_yourself.ipynb
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import os
+from urllib.request import urlopen,urlretrieve
+from PIL import Image
+from tqdm import tqdm_notebook
+from sklearn.utils import shuffle
+import cv2
+
+from tensorflow.keras.models import load_model
+from sklearn.datasets import load_files
+from glob import glob
+from tensorflow.keras import applications
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras import optimizers
+from tensorflow.keras.models import Sequential,Model,load_model
+from tensorflow.keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPool2D,GlobalAveragePooling2D
+from tensorflow.keras.utils import to_categorical
+from tensorflow.keras.callbacks import TensorBoard,ReduceLROnPlateau,ModelCheckpoint
+
+from data import IMG_SIZE, CATEGORIES, create_data, separate_features_and_label
+
+TRAIN_DATA_DIR = "/home/bloo/Documents/deep-learning/datasets/blood-cells/dataset2-master/images/TRAIN"
+TEST_DATA_DIR = "/home/bloo/Documents/deep-learning/datasets/blood-cells/dataset2-master/images/TEST"
+
+train_data = create_data(TRAIN_DATA_DIR)
+test_data = create_data(TEST_DATA_DIR)
+
+train_X, train_y = separate_features_and_label(train_data)
+test_X, test_y = separate_features_and_label(test_data)
+
+categorical_train_y = to_categorical(train_y)
+categorical_test_y = to_categorical(test_y)
+
+base_model = applications.resnet50.ResNet50(weights=None, include_top=False, input_shape=(IMG_SIZE, IMG_SIZE, 3))
+
+x = base_model.output
+x = GlobalAveragePooling2D()(x)
+x = Dropout(0.7)(x)
+predictions = Dense(len(CATEGORIES), activation='softmax')(x)
+model = Model(inputs=base_model.input, outputs=predictions)
+
+adam = optimizers.Adam(lr=0.001)
+model.compile(optimizer=adam, loss='categorical_crossentropy', metrics=['accuracy'])
+
+hist = model.fit(train_X, categorical_train_y, epochs=20, batch_size=128, validation_split=0.2)
+
+test_loss, test_acc = model.evaluate(test_X, categorical_test_y)
+print("Loss: " + str(test_loss))
+print("Test Accuracy: " + str(test_acc))
+
+model.summary()
+
+# train and validation loss
+plt.plot(hist.history['loss'])
+plt.plot(hist.history['val_loss'])
+plt.title('Model Loss')
+plt.ylabel('Loss')
+plt.xlabel('Epoch')
+plt.legend(['train', 'Validation'], loc='upper left')
+plt.show()
+
+# train and validation accuracy
+plt.plot(hist.history['acc'])
+plt.plot(hist.history['val_acc'])
+plt.title('Model Accuracy')
+plt.ylabel('Accuracy')
+plt.xlabel('Epoch')
+plt.legend(['train', 'Validation'], loc='upper left')
+plt.show()
