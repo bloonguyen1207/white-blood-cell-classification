@@ -1,30 +1,16 @@
 # Reference: https://github.com/priya-dwivedi/Deep-Learning/blob/master/resnet_keras/Residual_Networks_yourself.ipynb
 
-import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
-import os
-from urllib.request import urlopen,urlretrieve
-from PIL import Image
-from tqdm import tqdm_notebook
-from sklearn.utils import shuffle
-import cv2
-
-from tensorflow.keras.models import load_model
-from sklearn.datasets import load_files
-from glob import glob
 from tensorflow.keras import applications
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras import optimizers
-from tensorflow.keras.models import Sequential,Model,load_model
-from tensorflow.keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPool2D,GlobalAveragePooling2D
+from tensorflow.keras.models import Model
+from tensorflow.keras.layers import Dense, Dropout, GlobalAveragePooling2D
 from tensorflow.keras.utils import to_categorical
-from tensorflow.keras.callbacks import TensorBoard,ReduceLROnPlateau,ModelCheckpoint
 
 from data import IMG_SIZE, CATEGORIES, create_data, separate_features_and_label
 
-TRAIN_DATA_DIR = "/home/bloo/Documents/deep-learning/datasets/blood-cells/dataset2-master/images/TRAIN"
-TEST_DATA_DIR = "/home/bloo/Documents/deep-learning/datasets/blood-cells/dataset2-master/images/TEST"
+TRAIN_DATA_DIR = "data/dataset2-master/images/TRAIN"
+TEST_DATA_DIR = "data/dataset2-master/images/TEST"
 
 train_data = create_data(TRAIN_DATA_DIR)
 test_data = create_data(TEST_DATA_DIR)
