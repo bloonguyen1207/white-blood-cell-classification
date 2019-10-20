@@ -32,7 +32,7 @@ model = Model(inputs=base_model.input, outputs=predictions)
 adam = optimizers.Adam(lr=0.001)
 model.compile(optimizer=adam, loss='categorical_crossentropy', metrics=['accuracy'])
 
-hist = model.fit(train_X, categorical_train_y, epochs=20, batch_size=128, validation_split=0.2)
+hist = model.fit(train_X, categorical_train_y, epochs=20, batch_size=32, validation_split=0.2)
 
 test_loss, test_acc = model.evaluate(test_X, categorical_test_y)
 print("Loss: " + str(test_loss))

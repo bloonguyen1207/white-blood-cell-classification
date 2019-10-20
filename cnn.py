@@ -14,9 +14,8 @@ from tensorflow.keras import optimizers
 from sklearn.metrics import accuracy_score
 
 
-TRAIN_DATA_DIR = "/home/bloo/Documents/deep-learning/datasets/blood-cells/dataset2-master/images/TRAIN"
-TEST_DATA_DIR = "/home/bloo/Documents/deep-learning/datasets/blood-cells/dataset2-master/images/TEST"
-
+TRAIN_DATA_DIR = "data/dataset2-master/images/TRAIN"
+TEST_DATA_DIR = "data/dataset2-master/images/TEST"
 
 train_data = create_data(TRAIN_DATA_DIR)
 test_data = create_data(TEST_DATA_DIR)
@@ -31,21 +30,20 @@ model = Sequential()
 
 model.add(Conv2D(32, (3, 3), input_shape=(train_X.shape[1:]), activation="relu"))
 model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Dropout(0.20))
 
 model.add(Conv2D(64, (3, 3), activation="relu"))
 model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Dropout(0.20))
 
 model.add(Conv2D(64, (3, 3), activation="relu"))
 model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Dropout(0.40))
 
 model.add(Flatten())
 
 model.add(Dense(64, activation="relu"))
 model.add(Dense(128, activation="sigmoid"))
 model.add(Dense(64, activation="relu"))
+
+model.add(Dropout, 0.5)
 
 model.add(Dense(4, activation="softmax"))
 
