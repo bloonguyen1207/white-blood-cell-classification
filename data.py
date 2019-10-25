@@ -11,9 +11,14 @@ CATEGORIES = ["EOSINOPHIL", "LYMPHOCYTE", "MONOCYTE", "NEUTROPHIL"]
 IMG_SIZE = 60
 START_TIME = time.time()
 
+TRAIN_DATA_DIR = "data/dataset2-master/images/TRAIN"
+TEST_DATA_DIR = "data/dataset2-master/images/TEST"
 
-def create_data(data_dir):
+
+def create_data(train=True):
     data = []
+    data_dir = TRAIN_DATA_DIR if train else TEST_DATA_DIR
+
     for category in CATEGORIES:
         path = os.path.join(data_dir, category)
         class_num = CATEGORIES.index(category)

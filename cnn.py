@@ -13,12 +13,8 @@ from tensorflow.keras import optimizers
 
 from sklearn.metrics import accuracy_score
 
-
-TRAIN_DATA_DIR = "data/dataset2-master/images/TRAIN"
-TEST_DATA_DIR = "data/dataset2-master/images/TEST"
-
-train_data = create_data(TRAIN_DATA_DIR)
-test_data = create_data(TEST_DATA_DIR)
+train_data = create_data()
+test_data = create_data(train=False)
 
 train_X, train_y = separate_features_and_label(train_data)
 test_X, test_y = separate_features_and_label(test_data)
@@ -49,7 +45,7 @@ model.add(Dense(4, activation="softmax"))
 
 model.summary()
 
-adam = optimizers.Adam(lr=0.002)
+adam = optimizers.Adam(lr=0.001)
 model.compile(optimizer=adam, loss="sparse_categorical_crossentropy", metrics=["accuracy"])
 
 hist = model.fit(train_X, train_y, epochs=50, batch_size=128, validation_split=0.2)
