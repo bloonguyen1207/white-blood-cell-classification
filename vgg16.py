@@ -9,6 +9,8 @@ from data import create_data, separate_features_and_label
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D
 from tensorflow.keras.utils import to_categorical
+from tensorflow.python.keras.callbacks import ModelCheckpoint, EarlyStopping
+
 from tensorflow.keras import optimizers
 
 from sklearn.metrics import accuracy_score
@@ -58,6 +60,9 @@ adam = optimizers.Adam(lr=0.001)
 model.compile(optimizer=adam, loss="sparse_categorical_crossentropy", metrics=["accuracy"])
 
 hist = model.fit(train_X, categorical_train_y, epochs=50, batch_size=128, validation_split=0.2)
+checkpoint = ModelCheckpoint("vgg16_1.h5", monitor='val_acc', verbose=1, save_best_only=True, save_weights_only=False, mode='auto', period=1)
+early = EarlyStopping(monitor='val_acc', min_delta=0, patience=20, verbose=1, mode='auto')
+hist = model.fit_generator(steps_per_epoch=100, generator=train_data, validation_data=test_data, validation_steps=10, epochs=100, callbacks=[checkpoint, early])
 
 test_loss, test_acc = model.evaluate(test_X, categorical_test_y)
 
