@@ -25,35 +25,35 @@ test_X, test_y = separate_features_and_label(test_data)
 categorical_train_y = to_categorical(train_y)
 categorical_test_y = to_categorical(test_y)
 
-model = Sequential()
-
-model.add(Conv2D(input_shape=(train_X.shape[1:]), filters=64, kernel_size=(3, 3), padding="same", activation="relu"))
-model.add(Conv2D(filters=64, kernel_size=(3, 3), padding="same", activation="relu"))
-model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
-
-model.add(Conv2D(filters=128, kernel_size=(3, 3), padding="same", activation="relu"))
-model.add(Conv2D(filters=128, kernel_size=(3, 3), padding="same", activation="relu"))
-model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
-
-model.add(Conv2D(filters=256, kernel_size=(3, 3), padding="same", activation="relu"))
-model.add(Conv2D(filters=256, kernel_size=(3, 3), padding="same", activation="relu"))
-model.add(Conv2D(filters=256, kernel_size=(3, 3), padding="same", activation="relu"))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-
-model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
-model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
-model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-
-model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
-model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
-model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-
-model.add(Flatten())
-model.add(Dense(units=4096, activation="relu"))
-model.add(Dense(units=4096, activation="relu"))
-model.add(Dense(units=2, activation="softmax"))
+# model = Sequential()
+#
+# model.add(Conv2D(input_shape=(train_X.shape[1:]), filters=64, kernel_size=(3, 3), padding="same", activation="relu"))
+# model.add(Conv2D(filters=64, kernel_size=(3, 3), padding="same", activation="relu"))
+# model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
+#
+# model.add(Conv2D(filters=128, kernel_size=(3, 3), padding="same", activation="relu"))
+# model.add(Conv2D(filters=128, kernel_size=(3, 3), padding="same", activation="relu"))
+# model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
+#
+# model.add(Conv2D(filters=256, kernel_size=(3, 3), padding="same", activation="relu"))
+# model.add(Conv2D(filters=256, kernel_size=(3, 3), padding="same", activation="relu"))
+# model.add(Conv2D(filters=256, kernel_size=(3, 3), padding="same", activation="relu"))
+# model.add(MaxPooling2D(pool_size=(2, 2)))
+#
+# model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+# model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+# model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+# model.add(MaxPooling2D(pool_size=(2, 2)))
+#
+# model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+# model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+# model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+# model.add(MaxPooling2D(pool_size=(2, 2)))
+#
+# model.add(Flatten())
+# model.add(Dense(units=4096, activation="relu"))
+# model.add(Dense(units=4096, activation="relu"))
+# model.add(Dense(units=2, activation="softmax"))
 
 VGG16_MODEL = VGG16(input_shape=(train_X.shape[1:]), include_top=False, weights=None)
 
