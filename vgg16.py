@@ -62,10 +62,11 @@ model.add(Dense(4, activation="softmax"))
 model.summary()
 
 adam = optimizers.Adam(lr=0.001)
-model.compile(optimizer=adam, loss="sparse_categorical_crossentropy", metrics=["accuracy"])
+sgd = optimizers.SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
+model.compile(optimizer=adam, loss="categorical_crossentropy", metrics=["accuracy"])
 
-hist = model.fit(train_X, train_y, epochs=50, batch_size=128, validation_split=0.2)
-test_loss, test_acc = model.evaluate(test_X, test_y)
+hist = model.fit(train_X, categorical_train_y, epochs=50, batch_size=128, validation_split=0.2)
+test_loss, test_acc = model.evaluate(test_X, categorical_test_y)
 
 # train and validation loss
 plt.plot(hist.history['loss'])
