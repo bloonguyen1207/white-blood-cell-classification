@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from tensorflow.keras import applications
 from tensorflow.keras import optimizers
 from tensorflow.keras.models import Model
-from tensorflow.keras.layers import Dense, Dropout, GlobalMaxPool2D
+from tensorflow.keras.layers import Dense, Dropout, GlobalMaxPool2D, Flatten
 from tensorflow.keras.utils import to_categorical
 
 from data import IMG_SIZE, CATEGORIES, create_data, separate_features_and_label
@@ -22,6 +22,8 @@ base_model = applications.resnet50.ResNet50(weights=None, include_top=False, inp
 
 x = base_model.output
 x = GlobalMaxPool2D()(x)
+x = Flatten()(x)
+x = Dense(64, activation="relu")(x)
 x = Dropout(0.7)(x)
 predictions = Dense(len(CATEGORIES), activation='softmax')(x)
 model = Model(inputs=base_model.input, outputs=predictions)

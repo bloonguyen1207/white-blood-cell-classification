@@ -26,20 +26,21 @@ model = Sequential()
 
 model.add(Conv2D(32, (3, 3), input_shape=(train_X.shape[1:]), activation="relu"))
 model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.1))
 
 model.add(Conv2D(64, (3, 3), activation="relu"))
 model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.2))
 
 model.add(Conv2D(128, (3, 3), activation="relu"))
 model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.4))
 
 model.add(Flatten())
 
 model.add(Dense(64, activation="relu"))
 model.add(Dense(128, activation="sigmoid"))
 model.add(Dense(64, activation="relu"))
-
-model.add(Dropout(0.5))
 
 model.add(Dense(4, activation="softmax"))
 
