@@ -26,7 +26,7 @@ model = Sequential()
 
 model.add(Conv2D(32, (3, 3), input_shape=(train_X.shape[1:]), activation="relu"))
 model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Dropout(0.1))
+model.add(Dropout(0.2))
 
 model.add(Conv2D(64, (3, 3), activation="relu"))
 model.add(MaxPooling2D(pool_size=(2, 2)))
@@ -39,19 +39,18 @@ model.add(Dropout(0.4))
 model.add(Flatten())
 
 model.add(Dense(64, activation="relu"))
-model.add(Dense(128, activation="sigmoid"))
+model.add(Dense(128, activation="relu"))
 model.add(Dense(64, activation="relu"))
 
 model.add(Dense(4, activation="softmax"))
 
 model.summary()
 
-adam = optimizers.Adam(lr=0.01)
-model.compile(optimizer=adam, loss="sparse_categorical_crossentropy", metrics=["accuracy"])
+model.compile(optimizer='adam', loss="categorical_crossentropy", metrics=["accuracy"])
 
-hist = model.fit(train_X, train_y, epochs=50, batch_size=128, validation_split=0.2)
+hist = model.fit(train_X, categorical_train_y, epochs=50, batch_size=128, validation_split=0.2)
 
-test_loss, test_acc = model.evaluate(test_X, test_y)
+test_loss, test_acc = model.evaluate(test_X, categorical_test_y)
 
 # train and validation loss
 plt.plot(hist.history['loss'])
