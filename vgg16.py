@@ -25,50 +25,46 @@ test_X, test_y = separate_features_and_label(test_data)
 categorical_train_y = to_categorical(train_y)
 categorical_test_y = to_categorical(test_y)
 
-# model = Sequential()
-#
-# model.add(Conv2D(input_shape=(train_X.shape[1:]), filters=64, kernel_size=(3, 3), padding="same", activation="relu"))
-# model.add(Conv2D(filters=64, kernel_size=(3, 3), padding="same", activation="relu"))
-# model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
-#
-# model.add(Conv2D(filters=128, kernel_size=(3, 3), padding="same", activation="relu"))
-# model.add(Conv2D(filters=128, kernel_size=(3, 3), padding="same", activation="relu"))
-# model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
-#
-# model.add(Conv2D(filters=256, kernel_size=(3, 3), padding="same", activation="relu"))
-# model.add(Conv2D(filters=256, kernel_size=(3, 3), padding="same", activation="relu"))
-# model.add(Conv2D(filters=256, kernel_size=(3, 3), padding="same", activation="relu"))
-# model.add(MaxPooling2D(pool_size=(2, 2)))
-#
-# model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
-# model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
-# model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
-# model.add(MaxPooling2D(pool_size=(2, 2)))
-#
-# model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
-# model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
-# model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
-# model.add(MaxPooling2D(pool_size=(2, 2)))
-#
-# model.add(Flatten())
-# model.add(Dense(units=4096, activation="relu"))
-# model.add(Dense(units=4096, activation="relu"))
-# model.add(Dense(units=2, activation="softmax"))
+model = Sequential()
 
-VGG16_MODEL = VGG16(input_shape=(train_X.shape[1:]), include_top=False, weights=None)
+model.add(Conv2D(input_shape=(train_X.shape[1:]), filters=64, kernel_size=(3, 3), padding="same", activation="relu"))
+model.add(Conv2D(filters=64, kernel_size=(3, 3), padding="same", activation="relu"))
+model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 
-VGG16_MODEL.trainable = False
-global_average_layer = GlobalAveragePooling2D()
-prediction_layer = Dense(4, activation='softmax')
+model.add(Conv2D(filters=128, kernel_size=(3, 3), padding="same", activation="relu"))
+model.add(Conv2D(filters=128, kernel_size=(3, 3), padding="same", activation="relu"))
+model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 
-model = Sequential([VGG16_MODEL, global_average_layer, prediction_layer])
+model.add(Conv2D(filters=256, kernel_size=(3, 3), padding="same", activation="relu"))
+model.add(Conv2D(filters=256, kernel_size=(3, 3), padding="same", activation="relu"))
+model.add(Conv2D(filters=256, kernel_size=(3, 3), padding="same", activation="relu"))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+
+model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+
+model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+model.add(Conv2D(filters=512, kernel_size=(3, 3), padding="same", activation="relu"))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+
+model.add(Flatten())
+model.add(Dense(units=4096, activation="relu"))
+model.add(Dense(units=4096, activation="relu"))
+model.add(Dense(units=2, activation="softmax"))
+
+model.add(Dropout(0.5))
+
+model.add(Dense(4, activation="softmax"))
 
 model.summary()
 
 adam = optimizers.Adam(lr=0.001)
 model.compile(optimizer=adam, loss="sparse_categorical_crossentropy", metrics=["accuracy"])
 
-hist = model.fit(train_X, train_y, epochs=50, steps_per_epoch=2, validation_steps=2, validation_split=0.2)
+hist = model.fit(train_X, train_y, epochs=50, batch_size=128, validation_split=0.2)
 test_loss, test_acc = model.evaluate(test_X, test_y)
 
 # train and validation loss
