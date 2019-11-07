@@ -18,20 +18,20 @@ test_X, test_y = separate_features_and_label(test_data)
 categorical_train_y = to_categorical(train_y)
 categorical_test_y = to_categorical(test_y)
 
-base_model = applications.resnet50.ResNet50(weights=None, include_top=False, input_shape=(IMG_SIZE, IMG_SIZE, 3))
+base_model = applications.resnet50.ResNet50(weights='imagenet', include_top=False, input_shape=(IMG_SIZE, IMG_SIZE, 3))
 
 x = base_model.output
 x = GlobalMaxPool2D()(x)
 x = Flatten()(x)
 x = Dense(64, activation="relu")(x)
-x = Dropout(0.7)(x)
+x = Dropout(0.5)(x)
 predictions = Dense(len(CATEGORIES), activation='softmax')(x)
 model = Model(inputs=base_model.input, outputs=predictions)
 
-adam = optimizers.Adam(lr=0.00005)
+adam = optimizers.Adam(lr=0.0005)
 model.compile(optimizer=adam, loss='categorical_crossentropy', metrics=['accuracy'])
 
-hist = model.fit(train_X, categorical_train_y, epochs=20, batch_size=32, validation_split=0.2)
+hist = model.fit(train_X, categorical_train_y, epochs=25, batch_size=32, validation_split=0.2)
 
 test_loss, test_acc = model.evaluate(test_X, categorical_test_y)
 print("Loss: " + str(test_loss))

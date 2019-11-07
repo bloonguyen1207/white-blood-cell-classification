@@ -8,7 +8,7 @@ import cv2
 import random
 
 CATEGORIES = ["EOSINOPHIL", "LYMPHOCYTE", "MONOCYTE", "NEUTROPHIL"]
-IMG_SIZE = 60
+IMG_SIZE = 168
 START_TIME = time.time()
 
 TRAIN_DATA_DIR = "data/dataset2-master/images/TRAIN"

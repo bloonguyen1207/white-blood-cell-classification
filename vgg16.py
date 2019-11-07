@@ -83,8 +83,8 @@ model.summary()
 
 model.compile(optimizer='adam', loss="categorical_crossentropy", metrics=["accuracy"])
 hist = model.fit_generator(train_data, steps_per_epoch=8,
-                    validation_data=validation_data, validation_steps=8,
-                    epochs=5, verbose=2)
+                           validation_data=validation_data, validation_steps=8,
+                           epochs=5, verbose=2)
 
 predictions = model.predict_generator(test_data, steps=1, verbose=0)
 test_loss, test_acc = model.evaluate(test_X, categorical_test_y)
